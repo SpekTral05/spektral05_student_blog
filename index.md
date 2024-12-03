@@ -13,4 +13,5 @@ I'm 15 years old and I like playing video games, but apparently we get to make o
   ![alt text](image-1.png)
   ![alt text](image.png)
   ![alt text](image-2.png)
+
 I was born in Boston, Massachusetts on November 29, 2009. I moved to New York in 2011 and San Diego in 2015. I went to Del Sur Elementary for elementary school and Oak Valley for middle school. 
