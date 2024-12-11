@@ -12,7 +12,7 @@ Hi, my name is Advait!
   I'd like to learn to make simple games and learn web design, so this class seems fitting. I enjoy playing video games and hanging out with friends in my spare time. I also enjoy doing random projects on little hobbies I enjoy such as building Legos, Gunpla, and doing origami.<p>
 
   If you want, you can check out my bandlab profile where I make covers of music and some original music too! 
-  <button name="button" onclick="http://bandlab.com/spektral05">Bandlab Profile</button>
+  <button name="button" onclick="https://bandlab.com/spektral05">Bandlab Profile</button>
 <img src="https://www.lego.com/cdn/cs/set/assets/blt17452f7f0b4a4d08/71799.png">
 <img src="https://cdn11.bigcommerce.com/s-6k3asdl2tq/images/stencil/1280x1280/products/18125/24974/1__33236.1720455634.jpg?c=1">
 <img src="https://i.ytimg.com/vi/xbPeKkheWk0/maxresdefault.jpg">
