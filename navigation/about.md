@@ -19,12 +19,12 @@ Hi, my name is Advait!
   <style>
 .button {
   display: inline-block;
-  padding: 10px 20px;
+  padding: 5px 15px;
   background-color: #ccff00;
   color: white;
   text-decoration: none;
   border: none;
-  border-radius: 5px;
+  border-radius: 3px;
   cursor: pointer;
   font-size: 16px; 
   
