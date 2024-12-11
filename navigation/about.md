@@ -17,16 +17,7 @@ Hi, my name is Advait!
   <button>Bandlab Profile</button>
   </a>
   <style>
-.button {
-  display: inline-block;
-  padding: 5px 15px;
-  background-color: #ccff00;
-  color: white;
-  text-decoration: none;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  font-size: 16px; 
+  
   
 <img src="https://www.lego.com/cdn/cs/set/assets/blt17452f7f0b4a4d08/71799.png">
 <img src="https://cdn11.bigcommerce.com/s-6k3asdl2tq/images/stencil/1280x1280/products/18125/24974/1__33236.1720455634.jpg?c=1">
