@@ -6,7 +6,7 @@ github_repo: "spektral05_student_blog"
 baseurl: "/spektral05_student_blog"
 future: true
 remote_theme: jekyll/minima
-minima:
+minimal:
   skin: dark
   social_links:
     - { platform: github, user_url: "https://github.com/nighthawkcoders"}
