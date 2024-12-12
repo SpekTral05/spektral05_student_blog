@@ -30,3 +30,8 @@ If you want, you can check out my bandlab profile where I make covers of music a
   <button>Youtube Channel</button>
   </a>
   Subscribe!!
+
+<p> If you want to communicate with me on a place I will respond quickly (most of the time), use my discord! My username is spektral05.
+<a href="https://discord.com/app" target="_blank" class="button">
+  <button>Discord</button>
+  </a>
