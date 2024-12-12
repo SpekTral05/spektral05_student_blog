@@ -15,7 +15,10 @@ Hi, my name is Advait!
 <img src="https://cdn11.bigcommerce.com/s-6k3asdl2tq/images/stencil/1280x1280/products/18125/24974/1__33236.1720455634.jpg?c=1">
 <img src="https://i.ytimg.com/vi/xbPeKkheWk0/maxresdefault.jpg">
 
-<p>I was born in Boston, Massachusetts on November 29, 2009. I moved to New York in 2011 and San Diego in 2015. I went to Del Sur Elementary for elementary school and Oak Valley for middle school. I have a tightknit group of friends that I've been friends with for the last 6 years. Honestly, I couldnt've asked for better friends. Anyway, some games I like to play are Brawl Stars, Roblox, Pokémon, and Eve. I love doing anything that requires creativity or patience, but if you meet me in real life you'll think I'm super impatient (lol). Anyway, that's pretty much it.  <p>
+<p>I was born in Boston, Massachusetts on November 29, 2009. I moved to New York in 2011 and San Diego in 2015. My family is from India, so my parents were born there and immigrated here after living in Gemany for a while. 
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Flag_of_the_United_States_%28DoS_ECA_Color_Standard%29.svg/640px-Flag_of_the_United_States_%28DoS_ECA_Color_Standard%29.svg.png">
+<img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Flag_of_India.svg/1200px-Flag_of_India.svg.png">
+I went to Del Sur Elementary for elementary school and Oak Valley for middle school. I have a tightknit group of friends that I've been friends with for the last 6 years. Honestly, I couldnt've asked for better friends. Anyway, some games I like to play are Brawl Stars, Roblox, Pokémon, and Eve. I love doing anything that requires creativity or patience, but if you meet me in real life you'll think I'm super impatient (lol). Anyway, that's pretty much it.  <p>
 
 If you want, you can check out my bandlab profile where I make covers of music and some original music too! 
 
