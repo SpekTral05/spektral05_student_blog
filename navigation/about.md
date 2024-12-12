@@ -25,4 +25,7 @@ If you want, you can check out my bandlab profile where I make covers of music a
 <a href="https://bandlab.com/spektral05" target="_blank" class="button">
   <button>Bandlab Profile</button>
   </a>
-  <style>
+ I also have a youtube channel where I occasionally upload videos of my playing random games.
+ <a href="https://youtube.com/@spektral05" target="_blank" class="button">
+  <button>Bandlab Profile</button>
+  </a>
