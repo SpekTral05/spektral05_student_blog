@@ -379,3 +379,48 @@ permalink: /snake/
         }
     })();
 </script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game</title>
+    <style>
+        #game-container {
+            width: 400px;
+            height: 400px;
+            border: 2px solid black;
+            margin: 0 auto;
+        }
+        #fullscreen-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <!-- Your snake game will be here -->
+    </div>
+    <button id="fullscreen-btn">Go Fullscreen</button>
+
+    <script>
+        // JavaScript to handle fullscreen
+        const gameContainer = document.getElementById('game-container');
+        const fullscreenButton = document.getElementById('fullscreen-btn');
+
+        fullscreenButton.addEventListener('click', () => {
+            if (gameContainer.requestFullscreen) {
+                gameContainer.requestFullscreen(); // Standard Fullscreen API
+            } else if (gameContainer.webkitRequestFullscreen) {
+                gameContainer.webkitRequestFullscreen(); // Safari compatibility
+            } else if (gameContainer.msRequestFullscreen) {
+                gameContainer.msRequestFullscreen(); // Older Microsoft Edge compatibility
+            }
+        });
+    </script>
+</body>
+</html>
