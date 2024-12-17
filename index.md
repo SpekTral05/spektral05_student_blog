@@ -5,7 +5,13 @@ description: Home Page
 hide: true
 ---
 <h1 style="color:DarkGrey">Advait Deshpande</h1>
-Hi, this is my blog.
+# Welcome to My CSSE 1 Blog
+
+## Submenu
+
+- [Planning Document](notebooks/planning.md)
+- [JavaScript Notebook](notebooks/javascript.md)
+- [About Page](notebooks/about.md)
 
 [Tool Verification](https://spektral05.github.io/spektral05_student_blog/devops/tools/verify)
 
