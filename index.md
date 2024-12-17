@@ -193,6 +193,17 @@ permalink: /snake/
         }
         /* Actions and Events  */
         /////////////////////////////////////////////////////////////
+        window.addEventListener("keydown", function(evt) {
+    // Prevent the default action for arrow keys (scrolling)
+    if (evt.code === "ArrowUp" || evt.code === "ArrowDown" || evt.code === "ArrowLeft" || evt.code === "ArrowRight") {
+        evt.preventDefault();
+    }
+
+    // Spacebar detected for starting a new game
+    if (evt.code === "Space" && SCREEN !== SCREEN_SNAKE) {
+        newGame();
+    }
+}, true);   
         window.onload = function(){
             // HTML Events to Functions
             button_new_game.onclick = function(){newGame();};
