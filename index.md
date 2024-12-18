@@ -34,12 +34,10 @@ hide: true
       color: #FFFFFF;
       overflow: hidden;
     }
-
     /* Game Container */
     #game-container {
       text-align: center;
     }
-
     /* Glowing Canvas */
     canvas {
       border-style: solid;
@@ -49,13 +47,11 @@ hide: true
       display: block;
       margin: 0 auto;
     }
-
     /* Game Over Text */
     #gameover p {
       font-size: 24px;
       text-shadow: 0 0 10px #FFFFFF, 0 0 20px #FF0000; /* Glowing red-white text */
     }
-
     /* Button Styling */
     button {
       background-color: #FF0000;
@@ -67,7 +63,6 @@ hide: true
       box-shadow: 0 0 10px #FF0000; /* Glowing button */
       cursor: pointer;
     }
-
     button:hover {
       background-color: #FFFFFF;
       color: #FF0000;
@@ -85,23 +80,18 @@ hide: true
   <script>
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
-
     // Snake settings
     let snake = [{ x: 200, y: 200 }];
     let dx = 20;
     let dy = 0;
-
     // Food settings
     let foodX;
     let foodY;
-
     // Score and game settings
     let score = 0;
     let gameRunning = true;
-
     // Start the game
     startGame();
-
     function startGame() {
       snake = [{ x: 200, y: 200 }];
       dx = 20;
@@ -112,7 +102,6 @@ hide: true
       generateFood();
       main();
     }
-
     // Main game loop
     function main() {
       if (!gameRunning) return;
@@ -124,12 +113,10 @@ hide: true
         main();
       }, 100);
     }
-
     // Clear the canvas
     function clearCanvas() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
-
     // Update snake position
     function updateSnakePosition() {
       const head = { x: snake[0].x + dx, y: snake[0].y + dy };
@@ -141,7 +128,6 @@ hide: true
         snake.pop();
       }
     }
-
     // Draw the game elements (snake, food, score)
     function drawGame() {
       // Draw snake
@@ -149,23 +135,19 @@ hide: true
       snake.forEach(segment => {
         ctx.fillRect(segment.x, segment.y, 20, 20);
       });
-
       // Draw food
       ctx.fillStyle = "#FF0000"; // Red food color
       ctx.fillRect(foodX, foodY, 20, 20);
-
       // Draw score
       ctx.fillStyle = "#FFFFFF"; // White text color
       ctx.font = "20px Arial";
       ctx.fillText("Score: " + score, 10, 20);
     }
-
     // Generate food at random location
     function generateFood() {
       foodX = Math.floor(Math.random() * 20) * 20;
       foodY = Math.floor(Math.random() * 20) * 20;
     }
-
     // Check for collisions
     function checkCollisions() {
       const head = snake[0];
@@ -173,7 +155,6 @@ hide: true
       if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height) {
         gameOver();
       }
-
       // Check self-collision
       for (let i = 1; i < snake.length; i++) {
         if (head.x === snake[i].x && head.y === snake[i].y) {
@@ -181,13 +162,11 @@ hide: true
         }
       }
     }
-
     // Game over function
     function gameOver() {
       gameRunning = false;
       document.getElementById("gameover").style.display = "block";
     }
-
     // Handle key events
     document.addEventListener("keydown", function(event) {
       if (event.key === "ArrowUp" && dy === 0) {
@@ -206,16 +185,13 @@ hide: true
         dx = 20;
         dy = 0;
       }
-
       // Prevent scrolling with arrow keys
       event.preventDefault();
-
       // Toggle fullscreen on pressing "F" key
       if (event.key === "f" || event.key === "F") {
         toggleFullscreen();
       }
     });
-
     // Toggle fullscreen mode
     function toggleFullscreen() {
       if (!document.fullscreenElement) {
