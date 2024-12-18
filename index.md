@@ -15,12 +15,6 @@ hide: true
 
 [Tool Verification](https://spektral05.github.io/spektral05_student_blog/devops/tools/verify)
 
----
-layout: base
-title: Snake
-permalink: /snake/
----
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,6 +32,7 @@ permalink: /snake/
       margin: 0;
       font-family: Arial, sans-serif;
       color: #FFFFFF;
+      overflow: hidden;
     }
 
     /* Game Container */
@@ -123,70 +118,63 @@ permalink: /snake/
       if (!gameRunning) return;
       setTimeout(function () {
         clearCanvas();
-        drawFood();
-        moveSnake();
-        drawSnake();
-        checkCollision();
+        updateSnakePosition();
+        checkCollisions();
+        drawGame();
         main();
       }, 100);
     }
 
     // Clear the canvas
     function clearCanvas() {
-      ctx.fillStyle = "#000000"; // Black background
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
 
-    // Draw the snake
-    function drawSnake() {
-      ctx.fillStyle = "#00FF00"; // Glowing green snake
-      ctx.shadowBlur = 15;
-      ctx.shadowColor = "#00FF00"; // Green glow effect
-      snake.forEach(part => {
-        ctx.fillRect(part.x, part.y, 20, 20);
-      });
-      ctx.shadowBlur = 0; // Remove shadow blur for future elements
-    }
-
-    // Move the snake
-    function moveSnake() {
+    // Update snake position
+    function updateSnakePosition() {
       const head = { x: snake[0].x + dx, y: snake[0].y + dy };
       snake.unshift(head);
-
-      // Check if the snake ate food
       if (head.x === foodX && head.y === foodY) {
-        score++;
+        score += 10;
         generateFood();
       } else {
         snake.pop();
       }
     }
 
-    // Generate food at a random position
+    // Draw the game elements (snake, food, score)
+    function drawGame() {
+      // Draw snake
+      ctx.fillStyle = "#00FF00"; // Green snake color
+      snake.forEach(segment => {
+        ctx.fillRect(segment.x, segment.y, 20, 20);
+      });
+
+      // Draw food
+      ctx.fillStyle = "#FF0000"; // Red food color
+      ctx.fillRect(foodX, foodY, 20, 20);
+
+      // Draw score
+      ctx.fillStyle = "#FFFFFF"; // White text color
+      ctx.font = "20px Arial";
+      ctx.fillText("Score: " + score, 10, 20);
+    }
+
+    // Generate food at random location
     function generateFood() {
       foodX = Math.floor(Math.random() * 20) * 20;
       foodY = Math.floor(Math.random() * 20) * 20;
     }
 
-    // Draw the food
-    function drawFood() {
-      ctx.fillStyle = "#FF0000"; // Glowing red food
-      ctx.shadowBlur = 10;
-      ctx.shadowColor = "#FF0000"; // Red glow effect
-      ctx.fillRect(foodX, foodY, 20, 20);
-      ctx.shadowBlur = 0;
-    }
-
     // Check for collisions
-    function checkCollision() {
+    function checkCollisions() {
       const head = snake[0];
-
-      // Check for wall collision
+      // Check wall collision
       if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height) {
         gameOver();
       }
 
-      // Check for self collision
+      // Check self-collision
       for (let i = 1; i < snake.length; i++) {
         if (head.x === snake[i].x && head.y === snake[i].y) {
           gameOver();
@@ -194,28 +182,64 @@ permalink: /snake/
       }
     }
 
-    // Game over
+    // Game over function
     function gameOver() {
       gameRunning = false;
       document.getElementById("gameover").style.display = "block";
     }
 
-    // Control snake movement with arrow keys
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowUp" && dy === 0) {
+    // Handle key events
+    document.addEventListener("keydown", function(event) {
+      if (event.key === "ArrowUp" && dy === 0) {
         dx = 0;
         dy = -20;
-      } else if (e.key === "ArrowDown" && dy === 0) {
+      }
+      if (event.key === "ArrowDown" && dy === 0) {
         dx = 0;
         dy = 20;
-      } else if (e.key === "ArrowLeft" && dx === 0) {
+      }
+      if (event.key === "ArrowLeft" && dx === 0) {
         dx = -20;
         dy = 0;
-      } else if (e.key === "ArrowRight" && dx === 0) {
+      }
+      if (event.key === "ArrowRight" && dx === 0) {
         dx = 20;
         dy = 0;
       }
+
+      // Prevent scrolling with arrow keys
+      event.preventDefault();
+
+      // Toggle fullscreen on pressing "F" key
+      if (event.key === "f" || event.key === "F") {
+        toggleFullscreen();
+      }
     });
+
+    // Toggle fullscreen mode
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        if (canvas.requestFullscreen) {
+          canvas.requestFullscreen();
+        } else if (canvas.mozRequestFullScreen) { // Firefox
+          canvas.mozRequestFullScreen();
+        } else if (canvas.webkitRequestFullscreen) { // Chrome, Safari and Opera
+          canvas.webkitRequestFullscreen();
+        } else if (canvas.msRequestFullscreen) { // IE/Edge
+          canvas.msRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) { // Firefox
+          document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) { // Chrome, Safari and Opera
+          document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) { // IE/Edge
+          document.msExitFullscreen();
+        }
+      }
+    }
   </script>
 </body>
 </html>
