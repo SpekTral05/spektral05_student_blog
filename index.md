@@ -21,133 +21,201 @@ title: Snake
 permalink: /snake/
 ---
 
-<style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glowing Snake Game</title>
+  <style>
+    /* General Body Styling */
     body {
-        margin: 0;
-        font-family: 'Arial', sans-serif;
-        background-color: #121212;
-        color: #ffffff;
-        text-align: center;
+      background-color: #000000; /* Black background for a glowing effect */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: #FFFFFF;
     }
 
-    h2 {
-        color: #00e676;
+    /* Game Container */
+    #game-container {
+      text-align: center;
     }
 
-    .container {
-        max-width: 600px;
-        margin: 0 auto;
-    }
-
+    /* Glowing Canvas */
     canvas {
-        margin: 20px auto;
-        border-style: solid;
-        border-width: 10px;
-        border-color: #00e676;
-        background-color: #000;
-        box-shadow: 0px 0px 20px #00e676;
+      border-style: solid;
+      border-width: 10px;
+      border-color: #FFFFFF;
+      box-shadow: 0 0 20px #00FF00; /* Glowing green border */
+      display: block;
+      margin: 0 auto;
     }
 
-    .wrap {
-        margin: 0 auto;
+    /* Game Over Text */
+    #gameover p {
+      font-size: 24px;
+      text-shadow: 0 0 10px #FFFFFF, 0 0 20px #FF0000; /* Glowing red-white text */
     }
 
-    #menu, #gameover, #setting {
-        display: none;
+    /* Button Styling */
+    button {
+      background-color: #FF0000;
+      color: #FFFFFF;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      box-shadow: 0 0 10px #FF0000; /* Glowing button */
+      cursor: pointer;
     }
 
-    #menu p, #gameover p, #setting p {
-        font-size: 24px;
+    button:hover {
+      background-color: #FFFFFF;
+      color: #FF0000;
     }
-
-    #menu a, #gameover a, #setting a {
-        font-size: 24px;
-        text-decoration: none;
-        color: #00e676;
-        padding: 10px 20px;
-        border: 2px solid #00e676;
-        border-radius: 8px;
-        display: inline-block;
-        margin: 10px;
-        transition: background-color 0.3s, color 0.3s;
-    }
-
-    #menu a:hover, #gameover a:hover, #setting a:hover {
-        background-color: #00e676;
-        color: #000;
-    }
-
-    #menu {
-        display: block;
-    }
-
-    #setting input {
-        display: none;
-    }
-
-    #setting label {
-        display: inline-block;
-        padding: 10px 20px;
-        border: 2px solid #00e676;
-        border-radius: 8px;
-        margin: 5px;
-        cursor: pointer;
-        color: #00e676;
-        transition: background-color 0.3s, color 0.3s;
-    }
-
-    #setting input:checked + label {
-        background-color: #00e676;
-        color: #000;
-    }
-
-    #setting p {
-        margin: 20px 0;
-    }
-
-    .scoreboard {
-        font-size: 20px;
-        margin-bottom: 20px;
-    }
-</style>
-
-<h2>Snake</h2>
-<div class="container">
-    <header class="scoreboard">
-        <p>Score: <span id="score_value">0</span></p>
-    </header>
-    <div class="container">
-        <!-- Main Menu -->
-        <div id="menu" class="py-4">
-            <p>Welcome to Snake! Press <span style="color: #00e676; font-weight: bold;">SPACE</span> to begin.</p>
-            <a id="new_game">New Game</a>
-            <a id="setting_menu">Settings</a>
-        </div>
-        <!-- Game Over -->
-        <div id="gameover" class="py-4">
-            <p>Game Over! Press <span style="color: #00e676; font-weight: bold;">SPACE</span> to try again.</p>
-            <a id="new_game1">New Game</a>
-            <a id="setting_menu1">Settings</a>
-        </div>
-        <!-- Game Screen -->
-        <canvas id="snake" class="wrap" width="320" height="320" tabindex="1"></canvas>
-        <!-- Settings Screen -->
-        <div id="setting" class="py-4">
-            <p>Settings</p>
-            <p>Speed:</p>
-            <input id="speed1" type="radio" name="speed" value="120" checked/>
-            <label for="speed1">Slow</label>
-            <input id="speed2" type="radio" name="speed" value="75"/>
-            <label for="speed2">Normal</label>
-            <input id="speed3" type="radio" name="speed" value="35"/>
-            <label for="speed3">Fast</label>
-            <p>Walls:</p>
-            <input id="wallon" type="radio" name="wall" value="1" checked/>
-            <label for="wallon">On</label>
-            <input id="walloff" type="radio" name="wall" value="0"/>
-            <label for="walloff">Off</label>
-            <a id="new_game2">New Game</a>
-        </div>
+  </style>
+</head>
+<body>
+  <div id="game-container">
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <div id="gameover" style="display: none;">
+      <p>Game Over</p>
+      <button onclick="startGame()">Play Again</button>
     </div>
-</div>
+  </div>
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
 
+    // Snake settings
+    let snake = [{ x: 200, y: 200 }];
+    let dx = 20;
+    let dy = 0;
+
+    // Food settings
+    let foodX;
+    let foodY;
+
+    // Score and game settings
+    let score = 0;
+    let gameRunning = true;
+
+    // Start the game
+    startGame();
+
+    function startGame() {
+      snake = [{ x: 200, y: 200 }];
+      dx = 20;
+      dy = 0;
+      score = 0;
+      gameRunning = true;
+      document.getElementById("gameover").style.display = "none";
+      generateFood();
+      main();
+    }
+
+    // Main game loop
+    function main() {
+      if (!gameRunning) return;
+      setTimeout(function () {
+        clearCanvas();
+        drawFood();
+        moveSnake();
+        drawSnake();
+        checkCollision();
+        main();
+      }, 100);
+    }
+
+    // Clear the canvas
+    function clearCanvas() {
+      ctx.fillStyle = "#000000"; // Black background
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    // Draw the snake
+    function drawSnake() {
+      ctx.fillStyle = "#00FF00"; // Glowing green snake
+      ctx.shadowBlur = 15;
+      ctx.shadowColor = "#00FF00"; // Green glow effect
+      snake.forEach(part => {
+        ctx.fillRect(part.x, part.y, 20, 20);
+      });
+      ctx.shadowBlur = 0; // Remove shadow blur for future elements
+    }
+
+    // Move the snake
+    function moveSnake() {
+      const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+      snake.unshift(head);
+
+      // Check if the snake ate food
+      if (head.x === foodX && head.y === foodY) {
+        score++;
+        generateFood();
+      } else {
+        snake.pop();
+      }
+    }
+
+    // Generate food at a random position
+    function generateFood() {
+      foodX = Math.floor(Math.random() * 20) * 20;
+      foodY = Math.floor(Math.random() * 20) * 20;
+    }
+
+    // Draw the food
+    function drawFood() {
+      ctx.fillStyle = "#FF0000"; // Glowing red food
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = "#FF0000"; // Red glow effect
+      ctx.fillRect(foodX, foodY, 20, 20);
+      ctx.shadowBlur = 0;
+    }
+
+    // Check for collisions
+    function checkCollision() {
+      const head = snake[0];
+
+      // Check for wall collision
+      if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height) {
+        gameOver();
+      }
+
+      // Check for self collision
+      for (let i = 1; i < snake.length; i++) {
+        if (head.x === snake[i].x && head.y === snake[i].y) {
+          gameOver();
+        }
+      }
+    }
+
+    // Game over
+    function gameOver() {
+      gameRunning = false;
+      document.getElementById("gameover").style.display = "block";
+    }
+
+    // Control snake movement with arrow keys
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowUp" && dy === 0) {
+        dx = 0;
+        dy = -20;
+      } else if (e.key === "ArrowDown" && dy === 0) {
+        dx = 0;
+        dy = 20;
+      } else if (e.key === "ArrowLeft" && dx === 0) {
+        dx = -20;
+        dy = 0;
+      } else if (e.key === "ArrowRight" && dx === 0) {
+        dx = 20;
+        dy = 0;
+      }
+    });
+  </script>
+</body>
+</html>
