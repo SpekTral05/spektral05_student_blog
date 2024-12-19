@@ -29,8 +29,7 @@ hide: true
       margin: 0;
       font-family: Arial, sans-serif;
       color: #FFFFFF;
-      overflow-y: auto; /* Allow vertical scrolling */
-      overflow-x: hidden;
+      overflow: hidden; /* Prevent scrolling */
     }
     /* Game Container */
     #game-container {
@@ -60,6 +59,7 @@ hide: true
       border-radius: 5px;
       box-shadow: 0 0 10px #FF0000; /* Glowing button */
       cursor: pointer;
+      margin: 5px;
     }
     button:hover {
       background-color: #FFFFFF;
@@ -70,6 +70,7 @@ hide: true
 <body>
   <div id="game-container">
     <button id="start-button" onclick="startGame()">Start Game</button>
+    <button id="fullscreen-button" onclick="toggleFullscreen()">Fullscreen</button>
     <canvas id="gameCanvas" width="320" height="320"></canvas>
     <div id="gameover" style="display: none;">
       <p>Game Over</p>
@@ -91,8 +92,8 @@ hide: true
     let gameRunning = true;
     let flashing = false;
     // Animation timing
-    let lastRenderTime = 0; // Tracks the last frame's render time
-    const SNAKE_SPEED = 10; // Number of frames per second
+    let lastRenderTime = 0;
+    const SNAKE_SPEED = 10;
     function startGame() {
       snake = [{ x: 160, y: 160 }];
       dx = 16;
@@ -204,6 +205,17 @@ hide: true
         event.preventDefault();
       }
     });
+    // Fullscreen functionality
+    function toggleFullscreen() {
+      const container = document.getElementById("game-container");
+      if (!document.fullscreenElement) {
+        container.requestFullscreen().catch(err => {
+          console.error(`Error attempting to enable fullscreen: ${err.message}`);
+        });
+      } else {
+        document.exitFullscreen();
+      }
+    }
   </script>
 </body>
 </html>
