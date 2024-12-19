@@ -72,6 +72,7 @@ hide: true
 </head>
 <body>
   <div id="game-container">
+  <button id="start-button" onclick="startGame()">Start Game</button>
     <canvas id="gameCanvas" width="320" height="320"></canvas>
     <div id="gameover" style="display: none;">
       <p>Game Over</p>
