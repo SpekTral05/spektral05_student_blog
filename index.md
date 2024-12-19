@@ -92,7 +92,6 @@ hide: true
     let score = 0;
     let gameRunning = true;
     let flashing = false;
-
     // Start the game
     startGame();
     function startGame() {
@@ -106,7 +105,6 @@ hide: true
       generateFood();
       main();
     }
-
     // Main game loop
     function main() {
       if (!gameRunning) return;
@@ -118,12 +116,10 @@ hide: true
         main();
       }, 100);
     }
-
     // Clear the canvas
     function clearCanvas() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
-
     // Update snake position
     function updateSnakePosition() {
       const head = { x: snake[0].x + dx, y: snake[0].y + dy };
@@ -135,7 +131,6 @@ hide: true
         snake.pop();
       }
     }
-
     // Draw the game elements (snake, food, score)
     function drawGame() {
       // Draw snake
@@ -151,13 +146,11 @@ hide: true
       ctx.font = "16px Arial";
       ctx.fillText("Score: " + score, 10, 20);
     }
-
     // Generate food at random location
     function generateFood() {
       foodX = Math.floor(Math.random() * 20) * 16;
       foodY = Math.floor(Math.random() * 20) * 16;
     }
-
     // Check for collisions
     function checkCollisions() {
       const head = snake[0];
@@ -172,7 +165,6 @@ hide: true
         }
       }
     }
-
     // Game over function
     function gameOver() {
       gameRunning = false;
@@ -183,7 +175,6 @@ hide: true
         document.getElementById("gameover").style.display = "block";
       }, 2000);
     }
-
     // Flash screen effect
     function flashScreen() {
       let flashCount = 0;
@@ -196,7 +187,6 @@ hide: true
         flashCount++;
       }, 500);
     }
-
     // Handle key events
     document.addEventListener("keydown", function (event) {
       if (event.key === "ArrowUp" && dy === 0) {
@@ -224,7 +214,6 @@ hide: true
         toggleFullscreen();
       }
     });
-
     // Toggle fullscreen mode
     function toggleFullscreen() {
       if (!document.fullscreenElement) {
