@@ -129,7 +129,8 @@ hide: true
       // Draw snake
       snake.forEach((segment, index) => {
         ctx.fillStyle = segment.color;
-        ctx.fillRect(segment.x, segment.y, 16, 16);
+        ctx.fillRect(segment.x, segment.y, 16, 16);ctx.shadowBlur = 15;
+      ctx.shadowColor = foodColor;
         // Add a glowing effect for the head
         if (index === 0) {
           ctx.shadowBlur = 10;
