@@ -5,8 +5,6 @@ description: Home Page
 hide: true
 ---
 <h1 style="color:DarkGrey">Advait Deshpande</h1>
-# Welcome to My CSSE 1 Blog
-
 ## Submenu
 
 - [Planning Document](notebooks/planning.md)
