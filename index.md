@@ -13,6 +13,7 @@ hide: true
 
 [Tool Verification](https://spektral05.github.io/spektral05_student_blog/devops/tools/verify)
 
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -22,7 +23,6 @@ hide: true
     body {
       background-color: #000000;
       margin: 0;
-      overflow: hidden;
     }
     #game-container {
       display: flex;
@@ -35,7 +35,7 @@ hide: true
       border-style: solid;
       border-width: 8px;
       border-color: #FFFFFF;
-      box-shadow: 0 0 15px #00FF00; /* Initial glow */
+      box-shadow: 0 0 15px #00FF00;
       display: block;
     }
     button {
@@ -202,9 +202,11 @@ hide: true
           console.error(`Error attempting to enable fullscreen: ${err.message}`);
         });
         resizeCanvas(true);
+        document.body.style.overflow = "hidden";
       } else {
         document.exitFullscreen();
         resizeCanvas(false);
+        document.body.style.overflow = "auto";
       }
     }
     function resizeCanvas(isFullscreen) {
