@@ -15,7 +15,6 @@ hide: true
 
 [Tool Verification](https://spektral05.github.io/spektral05_student_blog/devops/tools/verify)
 
-<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
