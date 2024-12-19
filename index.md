@@ -32,7 +32,8 @@ hide: true
       margin: 0;
       font-family: Arial, sans-serif;
       color: #FFFFFF;
-      overflow: hidden;
+      overflow-y: auto; /* Allow vertical scrolling */
+      overflow-x: hidden;
     }
     /* Game Container */
     #game-container {
@@ -41,9 +42,9 @@ hide: true
     /* Glowing Canvas */
     canvas {
       border-style: solid;
-      border-width: 10px;
+      border-width: 8px;
       border-color: #FFFFFF;
-      box-shadow: 0 0 20px #00FF00; /* Glowing green border */
+      box-shadow: 0 0 15px #00FF00; /* Glowing green border */
       display: block;
       margin: 0 auto;
     }
@@ -71,7 +72,7 @@ hide: true
 </head>
 <body>
   <div id="game-container">
-    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <canvas id="gameCanvas" width="320" height="320"></canvas>
     <div id="gameover" style="display: none;">
       <p>Game Over</p>
       <button onclick="startGame()">Play Again</button>
@@ -81,8 +82,8 @@ hide: true
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
     // Snake settings
-    let snake = [{ x: 200, y: 200 }];
-    let dx = 20;
+    let snake = [{ x: 160, y: 160 }];
+    let dx = 16;
     let dy = 0;
     // Food settings
     let foodX;
@@ -90,18 +91,22 @@ hide: true
     // Score and game settings
     let score = 0;
     let gameRunning = true;
+    let flashing = false;
+
     // Start the game
     startGame();
     function startGame() {
-      snake = [{ x: 200, y: 200 }];
-      dx = 20;
+      snake = [{ x: 160, y: 160 }];
+      dx = 16;
       dy = 0;
       score = 0;
       gameRunning = true;
+      flashing = false;
       document.getElementById("gameover").style.display = "none";
       generateFood();
       main();
     }
+
     // Main game loop
     function main() {
       if (!gameRunning) return;
@@ -113,10 +118,12 @@ hide: true
         main();
       }, 100);
     }
+
     // Clear the canvas
     function clearCanvas() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
+
     // Update snake position
     function updateSnakePosition() {
       const head = { x: snake[0].x + dx, y: snake[0].y + dy };
@@ -128,26 +135,29 @@ hide: true
         snake.pop();
       }
     }
+
     // Draw the game elements (snake, food, score)
     function drawGame() {
       // Draw snake
       ctx.fillStyle = "#00FF00"; // Green snake color
       snake.forEach(segment => {
-        ctx.fillRect(segment.x, segment.y, 20, 20);
+        ctx.fillRect(segment.x, segment.y, 16, 16);
       });
       // Draw food
       ctx.fillStyle = "#FF0000"; // Red food color
-      ctx.fillRect(foodX, foodY, 20, 20);
+      ctx.fillRect(foodX, foodY, 16, 16);
       // Draw score
       ctx.fillStyle = "#FFFFFF"; // White text color
-      ctx.font = "20px Arial";
+      ctx.font = "16px Arial";
       ctx.fillText("Score: " + score, 10, 20);
     }
+
     // Generate food at random location
     function generateFood() {
-      foodX = Math.floor(Math.random() * 20) * 20;
-      foodY = Math.floor(Math.random() * 20) * 20;
+      foodX = Math.floor(Math.random() * 20) * 16;
+      foodY = Math.floor(Math.random() * 20) * 16;
     }
+
     // Check for collisions
     function checkCollisions() {
       const head = snake[0];
@@ -162,36 +172,59 @@ hide: true
         }
       }
     }
+
     // Game over function
     function gameOver() {
       gameRunning = false;
-      document.getElementById("gameover").style.display = "block";
+      flashing = true;
+      flashScreen();
+      setTimeout(() => {
+        flashing = false;
+        document.getElementById("gameover").style.display = "block";
+      }, 2000);
     }
+
+    // Flash screen effect
+    function flashScreen() {
+      let flashCount = 0;
+      const flashInterval = setInterval(() => {
+        if (!flashing || flashCount >= 4) {
+          clearInterval(flashInterval);
+          return;
+        }
+        canvas.style.backgroundColor = flashCount % 2 === 0 ? "#FF0000" : "#000000";
+        flashCount++;
+      }, 500);
+    }
+
     // Handle key events
-    document.addEventListener("keydown", function(event) {
+    document.addEventListener("keydown", function (event) {
       if (event.key === "ArrowUp" && dy === 0) {
         dx = 0;
-        dy = -20;
+        dy = -16;
       }
       if (event.key === "ArrowDown" && dy === 0) {
         dx = 0;
-        dy = 20;
+        dy = 16;
       }
       if (event.key === "ArrowLeft" && dx === 0) {
-        dx = -20;
+        dx = -16;
         dy = 0;
       }
       if (event.key === "ArrowRight" && dx === 0) {
-        dx = 20;
+        dx = 16;
         dy = 0;
       }
-      // Prevent scrolling with arrow keys
-      event.preventDefault();
+      // Prevent arrow keys from scrolling
+      if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key)) {
+        event.preventDefault();
+      }
       // Toggle fullscreen on pressing "F" key
       if (event.key === "f" || event.key === "F") {
         toggleFullscreen();
       }
     });
+
     // Toggle fullscreen mode
     function toggleFullscreen() {
       if (!document.fullscreenElement) {
