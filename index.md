@@ -93,8 +93,7 @@ hide: true
     let score = 0;
     let gameRunning = true;
     let flashing = false;
-    // Start the game
-    startGame();
+    //Wait for user to press start game
     function startGame() {
       snake = [{ x: 160, y: 160 }];
       dx = 16;
