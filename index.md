@@ -90,10 +90,10 @@ hide: true
     let score = 0;
     let gameRunning = true;
     let flashing = false;
-    // Wait for user to press start game
+    // Animation timing
+    let lastRenderTime = 0; // Tracks the last frame's render time
+    const SNAKE_SPEED = 10; // Number of frames per second
     function startGame() {
-      // Hide the start button on game start
-      document.getElementById("start-button").style.display = "none";
       snake = [{ x: 160, y: 160 }];
       dx = 16;
       dy = 0;
@@ -101,25 +101,27 @@ hide: true
       gameRunning = true;
       flashing = false;
       document.getElementById("gameover").style.display = "none";
+      document.getElementById("start-button").style.display = "none"; // Hide the start button
       generateFood();
-      main();
+      requestAnimationFrame(main); // Start the game loop
     }
-    // Main game loop
-    function main() {
+    function main(currentTime) {
       if (!gameRunning) return;
-      setTimeout(function () {
-        clearCanvas();
-        updateSnakePosition();
-        checkCollisions();
-        drawGame();
-        main();
-      }, 150);
+      const secondsSinceLastRender = (currentTime - lastRenderTime) / 1000;
+      if (secondsSinceLastRender < 1 / SNAKE_SPEED) {
+        requestAnimationFrame(main);
+        return;
+      }
+      lastRenderTime = currentTime;
+      clearCanvas();
+      updateSnakePosition();
+      checkCollisions();
+      drawGame();
+      requestAnimationFrame(main);
     }
-    // Clear the canvas
     function clearCanvas() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
-    // Update snake position
     function updateSnakePosition() {
       const head = { x: snake[0].x + dx, y: snake[0].y + dy };
       snake.unshift(head);
@@ -130,7 +132,6 @@ hide: true
         snake.pop();
       }
     }
-    // Draw the game elements (snake, food, score)
     function drawGame() {
       // Draw snake
       ctx.fillStyle = "#00FF00"; // Green snake color
@@ -145,12 +146,10 @@ hide: true
       ctx.font = "16px Arial";
       ctx.fillText("Score: " + score, 10, 20);
     }
-    // Generate food at random location
     function generateFood() {
       foodX = Math.floor(Math.random() * 20) * 16;
       foodY = Math.floor(Math.random() * 20) * 16;
     }
-    // Check for collisions
     function checkCollisions() {
       const head = snake[0];
       // Check wall collision
@@ -164,7 +163,6 @@ hide: true
         }
       }
     }
-    // Game over function
     function gameOver() {
       gameRunning = false;
       flashing = true;
@@ -174,7 +172,6 @@ hide: true
         document.getElementById("gameover").style.display = "block";
       }, 2000);
     }
-    // Flash screen effect
     function flashScreen() {
       let flashCount = 0;
       const flashInterval = setInterval(() => {
@@ -186,7 +183,6 @@ hide: true
         flashCount++;
       }, 500);
     }
-    // Handle key events
     document.addEventListener("keydown", function (event) {
       if (event.key === "ArrowUp" && dy === 0) {
         dx = 0;
@@ -204,39 +200,10 @@ hide: true
         dx = 16;
         dy = 0;
       }
-      // Prevent arrow keys from scrolling
       if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key)) {
         event.preventDefault();
       }
-      // Toggle fullscreen on pressing "F" key
-      if (event.key === "f" || event.key === "F") {
-        toggleFullscreen();
-      }
     });
-    // Toggle fullscreen mode
-    function toggleFullscreen() {
-      if (!document.fullscreenElement) {
-        if (canvas.requestFullscreen) {
-          canvas.requestFullscreen();
-        } else if (canvas.mozRequestFullScreen) { // Firefox
-          canvas.mozRequestFullScreen();
-        } else if (canvas.webkitRequestFullscreen) { // Chrome, Safari and Opera
-          canvas.webkitRequestFullscreen();
-        } else if (canvas.msRequestFullscreen) { // IE/Edge
-          canvas.msRequestFullscreen();
-        }
-      } else {
-        if (document.exitFullscreen) {
-          document.exitFullscreen();
-        } else if (document.mozCancelFullScreen) { // Firefox
-          document.mozCancelFullScreen();
-        } else if (document.webkitExitFullscreen) { // Chrome, Safari and Opera
-          document.webkitExitFullscreen();
-        } else if (document.msExitFullscreen) { // IE/Edge
-          document.msExitFullscreen();
-        }
-      }
-    }
   </script>
 </body>
 </html>
