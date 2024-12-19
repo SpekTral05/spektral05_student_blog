@@ -17,39 +17,27 @@ hide: true
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Glowing Snake Game</title>
+  <title>Fullscreen Snake Game</title>
   <style>
-    /* General Body Styling */
     body {
-      background-color: #000000; /* Black background for a glowing effect */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      background-color: #000000;
       margin: 0;
-      font-family: Arial, sans-serif;
-      color: #FFFFFF;
-      overflow: hidden; /* Prevent scrolling */
+      overflow: hidden;
     }
-    /* Game Container */
     #game-container {
-      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
     }
-    /* Glowing Canvas */
     canvas {
       border-style: solid;
       border-width: 8px;
       border-color: #FFFFFF;
-      box-shadow: 0 0 15px #00FF00; /* Glowing green border */
+      box-shadow: 0 0 15px #00FF00; /* Initial glow */
       display: block;
-      margin: 0 auto;
     }
-    /* Game Over Text */
-    #gameover p {
-      font-size: 24px;
-      text-shadow: 0 0 10px #FFFFFF, 0 0 20px #FF0000; /* Glowing red-white text */
-    }
-    /* Button Styling */
     button {
       background-color: #FF0000;
       color: #FFFFFF;
@@ -57,13 +45,17 @@ hide: true
       font-size: 16px;
       border: none;
       border-radius: 5px;
-      box-shadow: 0 0 10px #FF0000; /* Glowing button */
+      box-shadow: 0 0 10px #FF0000;
       cursor: pointer;
       margin: 5px;
     }
     button:hover {
       background-color: #FFFFFF;
       color: #FF0000;
+    }
+    #gameover p {
+      font-size: 24px;
+      text-shadow: 0 0 10px #FFFFFF, 0 0 20px #FF0000;
     }
   </style>
 </head>
@@ -81,30 +73,29 @@ hide: true
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
     // Snake settings
-    let snake = [{ x: 160, y: 160 }];
+    let snake = [{ x: 160, y: 160, color: "#00FF00" }];
     let dx = 16;
     let dy = 0;
     // Food settings
     let foodX;
     let foodY;
+    let foodColor;
     // Score and game settings
     let score = 0;
     let gameRunning = true;
-    let flashing = false;
     // Animation timing
     let lastRenderTime = 0;
     const SNAKE_SPEED = 10;
     function startGame() {
-      snake = [{ x: 160, y: 160 }];
+      snake = [{ x: 160, y: 160, color: "#00FF00" }];
       dx = 16;
       dy = 0;
       score = 0;
       gameRunning = true;
-      flashing = false;
       document.getElementById("gameover").style.display = "none";
-      document.getElementById("start-button").style.display = "none"; // Hide the start button
+      document.getElementById("start-button").style.display = "none";
       generateFood();
-      requestAnimationFrame(main); // Start the game loop
+      requestAnimationFrame(main);
     }
     function main(currentTime) {
       if (!gameRunning) return;
@@ -124,32 +115,46 @@ hide: true
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
     function updateSnakePosition() {
-      const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+      const head = { x: snake[0].x + dx, y: snake[0].y + dy, color: snake[0].color };
       snake.unshift(head);
       if (head.x === foodX && head.y === foodY) {
         score += 10;
         generateFood();
+        head.color = foodColor; // Add the food's color to the new snake segment
       } else {
         snake.pop();
       }
     }
     function drawGame() {
       // Draw snake
-      ctx.fillStyle = "#00FF00"; // Green snake color
-      snake.forEach(segment => {
+      snake.forEach((segment, index) => {
+        ctx.fillStyle = segment.color;
         ctx.fillRect(segment.x, segment.y, 16, 16);
+        // Add a glowing effect for the head
+        if (index === 0) {
+          ctx.shadowBlur = 10;
+          ctx.shadowColor = segment.color;
+        } else {
+          ctx.shadowBlur = 0;
+        }
       });
       // Draw food
-      ctx.fillStyle = "#FF0000"; // Red food color
+      ctx.fillStyle = foodColor;
+      ctx.shadowBlur = 15;
+      ctx.shadowColor = foodColor;
       ctx.fillRect(foodX, foodY, 16, 16);
+      // Reset shadow
+      ctx.shadowBlur = 0;
       // Draw score
-      ctx.fillStyle = "#FFFFFF"; // White text color
+      ctx.fillStyle = "#FFFFFF";
       ctx.font = "16px Arial";
       ctx.fillText("Score: " + score, 10, 20);
     }
     function generateFood() {
-      foodX = Math.floor(Math.random() * 20) * 16;
-      foodY = Math.floor(Math.random() * 20) * 16;
+      foodX = Math.floor(Math.random() * (canvas.width / 16)) * 16;
+      foodY = Math.floor(Math.random() * (canvas.height / 16)) * 16;
+      // Generate a random color for the food
+      foodColor = `hsl(${Math.random() * 360}, 100%, 50%)`; // Random hue
     }
     function checkCollisions() {
       const head = snake[0];
@@ -166,23 +171,7 @@ hide: true
     }
     function gameOver() {
       gameRunning = false;
-      flashing = true;
-      flashScreen();
-      setTimeout(() => {
-        flashing = false;
-        document.getElementById("gameover").style.display = "block";
-      }, 2000);
-    }
-    function flashScreen() {
-      let flashCount = 0;
-      const flashInterval = setInterval(() => {
-        if (!flashing || flashCount >= 4) {
-          clearInterval(flashInterval);
-          return;
-        }
-        canvas.style.backgroundColor = flashCount % 2 === 0 ? "#FF0000" : "#000000";
-        flashCount++;
-      }, 500);
+      document.getElementById("gameover").style.display = "block";
     }
     document.addEventListener("keydown", function (event) {
       if (event.key === "ArrowUp" && dy === 0) {
@@ -212,10 +201,26 @@ hide: true
         container.requestFullscreen().catch(err => {
           console.error(`Error attempting to enable fullscreen: ${err.message}`);
         });
+        resizeCanvas(true);
       } else {
         document.exitFullscreen();
+        resizeCanvas(false);
       }
     }
+    function resizeCanvas(isFullscreen) {
+      if (isFullscreen) {
+        canvas.width = window.innerWidth - 20;
+        canvas.height = window.innerHeight - 20;
+      } else {
+        canvas.width = 320;
+        canvas.height = 320;
+      }
+    }
+    window.addEventListener("resize", () => {
+      if (document.fullscreenElement) {
+        resizeCanvas(true);
+      }
+    });
   </script>
 </body>
 </html>
