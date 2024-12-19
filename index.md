@@ -115,7 +115,7 @@ hide: true
         checkCollisions();
         drawGame();
         main();
-      }, 100);
+      }, 150);
     }
     // Clear the canvas
     function clearCanvas() {
