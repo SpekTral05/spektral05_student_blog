@@ -72,7 +72,7 @@ hide: true
 </head>
 <body>
   <div id="game-container">
-  <button id="start-button" onclick="startGame()">Start Game</button>
+    <button id="start-button" onclick="startGame()">Start Game</button>
     <canvas id="gameCanvas" width="320" height="320"></canvas>
     <div id="gameover" style="display: none;">
       <p>Game Over</p>
@@ -93,8 +93,10 @@ hide: true
     let score = 0;
     let gameRunning = true;
     let flashing = false;
-    //Wait for user to press start game
+    // Wait for user to press start game
     function startGame() {
+      // Hide the start button on game start
+      document.getElementById("start-button").style.display = "none";
       snake = [{ x: 160, y: 160 }];
       dx = 16;
       dy = 0;
