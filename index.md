@@ -144,8 +144,11 @@ hide: true
             });
         }
         function drawFood() {
-            ctx.fillStyle = 'red';
-            ctx.fillRect(food.x * scale, food.y * scale, scale, scale);
+    ctx.fillStyle = 'red';
+    ctx.shadowColor = 'red'; // Apply glowing effect
+    ctx.shadowBlur = 10; // Adjust glow intensity
+    ctx.fillRect(food.x * scale, food.y * scale, scale, scale);
+    ctx.shadowBlur = 0; // Reset the shadow blur to avoid affecting other elements
         }
         function moveSnake() {
             const head = { ...snake[0] };
