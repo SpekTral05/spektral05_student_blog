@@ -80,6 +80,10 @@ hide: true
       <button onclick="startGame()">Play Again</button>
     </div>
   </div>
+  <audio id="background-music" loop>
+    <source src="background-music.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
   <script>
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
@@ -87,6 +91,7 @@ hide: true
     let snake, dx, dy, foodX, foodY, foodColor, score, gameRunning;
     const colors = ["#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#FF00FF", "#00FFFF"];
     function startGame() {
+      // Reset game variables
       music.play(); 
       document.getElementById("start-button").style.display = "none";
       document.getElementById("gameover").style.display = "none";
@@ -119,15 +124,18 @@ hide: true
       }
     }
     function drawGame() {
+      // Draw Snake
       snake.forEach((segment, index) => {
         ctx.fillStyle = segment.color || colors[index % colors.length];
         ctx.fillRect(segment.x, segment.y, 16, 16);
       });
+      // Draw Food
       ctx.shadowColor = foodColor;
       ctx.shadowBlur = 15;
       ctx.fillStyle = foodColor;
       ctx.fillRect(foodX, foodY, 16, 16);
       ctx.shadowBlur = 0;
+      // Draw Score
       ctx.fillStyle = "#FFFFFF";
       ctx.font = "18px Arial";
       ctx.fillText("Score: " + score, 10, 20);
