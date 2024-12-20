@@ -20,9 +20,8 @@ hide: true
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Futuristic Snake Game</title>
   <style>
-    /* General Body Styling */
     body {
-      background: radial-gradient(circle at top, #1a1a1a, #000000); /* Smooth radial gradient */
+      background: radial-gradient(circle at top, #1a1a1a, #000000);
       color: #FFFFFF;
       font-family: "Roboto", Arial, sans-serif;
       margin: 0;
@@ -30,28 +29,23 @@ hide: true
       display: flex;
       justify-content: center;
       align-items: center;
-      overflow-y: auto; /* Allow vertical scrolling */
     }
-    /* Game Container */
     #game-container {
       text-align: center;
     }
-    /* Canvas Glow Effect */
     canvas {
       border: 8px solid #FFFFFF;
       border-radius: 15px;
-      box-shadow: 0 0 20px #00FFFF, 0 0 40px #0077FF; /* Vibrant neon glow */
+      box-shadow: 0 0 20px #00FFFF, 0 0 40px #0077FF;
       margin: 0 auto;
       display: block;
     }
-    /* Game Over Section */
     #gameover p {
       font-size: 24px;
-      text-shadow: 0 0 15px #FF0000, 0 0 30px #FF3300; /* Intense glowing red */
+      text-shadow: 0 0 15px #FF0000, 0 0 30px #FF3300;
     }
-    /* Dynamic Gradient Buttons */
     button {
-      background: linear-gradient(45deg, #00FFFF, #0077FF, #FF00FF, #FF0077); /* Gradient colors */
+      background: linear-gradient(45deg, #00FFFF, #0077FF, #FF00FF, #FF0077);
       background-size: 300%;
       color: #FFFFFF;
       font-size: 18px;
@@ -60,11 +54,11 @@ hide: true
       border-radius: 10px;
       cursor: pointer;
       animation: gradient-move 3s infinite;
-      box-shadow: 0 0 15px #00FFFF, 0 0 30px #0077FF; /* Glowing effect */
+      box-shadow: 0 0 15px #00FFFF, 0 0 30px #0077FF;
     }
     button:hover {
-      animation: gradient-move-hover 2s infinite; /* Faster gradient shift on hover */
-      box-shadow: 0 0 30px #FFFFFF; /* Brighter glow on hover */
+      animation: gradient-move-hover 2s infinite;
+      box-shadow: 0 0 30px #FFFFFF;
     }
     @keyframes gradient-move {
       0% { background-position: 0%; }
@@ -86,22 +80,15 @@ hide: true
       <button onclick="startGame()">Play Again</button>
     </div>
   </div>
-  <audio id="background-music" loop>
-    <source src="background-music.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
   <script>
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
     const music = document.getElementById("background-music");
-    let snake = [{ x: 240, y: 240 }];
-    let dx = 16, dy = 0;
-    let foodX, foodY, foodColor = "#FF0000";
-    let score = 0, gameRunning = false;
+    let snake, dx, dy, foodX, foodY, foodColor, score, gameRunning;
     const colors = ["#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#FF00FF", "#00FFFF"];
     function startGame() {
-      music.play(); // Play background music
-      document.getElementById("start-button").style.display = "none"; // Hide start button
+      music.play(); 
+      document.getElementById("start-button").style.display = "none";
       document.getElementById("gameover").style.display = "none";
       snake = [{ x: 240, y: 240 }];
       dx = 16; dy = 0; score = 0; gameRunning = true;
@@ -123,27 +110,24 @@ hide: true
     }
     function updateSnake() {
       const head = { x: snake[0].x + dx, y: snake[0].y + dy };
-      snake.unshift(head);
+      snake.unshift(head); // Add the new head
       if (head.x === foodX && head.y === foodY) {
-        generateFood();
-        snake.push({ ...snake[snake.length - 1], color: foodColor });
+        generateFood(); // Generate new food after eating
+        score++; // Increase score
       } else {
-        snake.pop();
+        snake.pop(); // Remove the tail if no food was eaten
       }
     }
     function drawGame() {
-      // Draw Snake
       snake.forEach((segment, index) => {
         ctx.fillStyle = segment.color || colors[index % colors.length];
         ctx.fillRect(segment.x, segment.y, 16, 16);
       });
-      // Draw Food
       ctx.shadowColor = foodColor;
       ctx.shadowBlur = 15;
       ctx.fillStyle = foodColor;
       ctx.fillRect(foodX, foodY, 16, 16);
       ctx.shadowBlur = 0;
-      // Draw Score
       ctx.fillStyle = "#FFFFFF";
       ctx.font = "18px Arial";
       ctx.fillText("Score: " + score, 10, 20);
@@ -156,31 +140,27 @@ hide: true
     function checkCollision() {
       const head = snake[0];
       if (head.x < 0 || head.y < 0 || head.x >= canvas.width || head.y >= canvas.height) {
-        endGame();
+        endGame(); // Collision with walls ends the game
       }
       for (let i = 1; i < snake.length; i++) {
         if (head.x === snake[i].x && head.y === snake[i].y) {
-          endGame();
+          endGame(); // Collision with itself ends the game
         }
       }
     }
     function endGame() {
       gameRunning = false;
-      music.pause(); // Stop background music
-      music.currentTime = 0; // Reset music to start
+      music.pause(); 
+      music.currentTime = 0; 
       document.getElementById("gameover").style.display = "block";
       document.getElementById("start-button").style.display = "block";
     }
-    // Disable arrow key scrolling while allowing trackpad scrolling
     document.addEventListener("keydown", (event) => {
+      if (!gameRunning) return; // Prevent moving the snake after the game ends
       if (event.key === "ArrowUp" && dy === 0) { dx = 0; dy = -16; }
       if (event.key === "ArrowDown" && dy === 0) { dx = 0; dy = 16; }
       if (event.key === "ArrowLeft" && dx === 0) { dx = -16; dy = 0; }
       if (event.key === "ArrowRight" && dx === 0) { dx = 16; dy = 0; }
-      // Prevent default scrolling behavior for arrow keys
-      if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key)) {
-        event.preventDefault();
-      }
     });
   </script>
 </body>
