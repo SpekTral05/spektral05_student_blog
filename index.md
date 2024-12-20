@@ -30,7 +30,7 @@ hide: true
       display: flex;
       justify-content: center;
       align-items: center;
-      overflow: hidden; /* Prevent page from scrolling */
+      overflow-y: auto; /* Allow vertical scrolling */
     }
     /* Game Container */
     #game-container {
