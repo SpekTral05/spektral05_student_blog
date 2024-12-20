@@ -67,6 +67,7 @@ hide: true
             display: flex;
             justify-content: center;
             align-items: center;
+            flex-direction: column;
         }
         canvas {
             background-color: #1a1a1a;
@@ -74,6 +75,14 @@ hide: true
             box-shadow: 0 0 20px rgba(0, 255, 0, 0.7);
             display: block;
             margin: 0;
+        }
+        .score {
+            font-size: 20px;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: lime;
+            font-weight: bold;
         }
         body { overflow: auto; }
         .glow { text-shadow: 0 0 20px rgba(0, 255, 0, 1), 0 0 30px rgba(0, 255, 0, 0.7); }
@@ -89,6 +98,7 @@ hide: true
 <body>
     <button class="start-btn" id="startBtn">Start Game</button>
     <div class="game-area">
+        <div class="score" id="scoreDisplay">Score: 0</div>
         <canvas id="gameCanvas" width="400" height="400" class="hidden"></canvas>
     </div>
     <div class="game-over hidden">
@@ -100,6 +110,7 @@ hide: true
         const gameCanvas = document.getElementById('gameCanvas');
         const restartBtn = document.getElementById('restartBtn');
         const gameOverDiv = document.querySelector('.game-over');
+        const scoreDisplay = document.getElementById('scoreDisplay');
         const ctx = gameCanvas.getContext('2d');
         const scale = 20;
         let snake = [{ x: 10, y: 10 }];
@@ -114,6 +125,7 @@ hide: true
             drawFood();
             moveSnake();
             checkCollisions();
+            updateScore();
             if (isGameOver) {
                 clearInterval(gameInterval);
                 gameOverDiv.classList.remove('hidden');
@@ -124,6 +136,11 @@ hide: true
             snake.forEach((part, index) => {
                 ctx.fillStyle = index === 0 ? 'lime' : 'green';
                 ctx.fillRect(part.x * scale, part.y * scale, scale, scale);
+                ctx.strokeStyle = index === 0 ? 'lime' : 'green';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(part.x * scale, part.y * scale, scale, scale);
+                ctx.shadowColor = index === 0 ? 'lime' : 'green';
+                ctx.shadowBlur = 10;
             });
         }
         function drawFood() {
@@ -161,6 +178,9 @@ hide: true
                 }
             }
         }
+        function updateScore() {
+            scoreDisplay.textContent = `Score: ${score}`;
+        }
         function changeDirection(event) {
             if (event.key === 'ArrowUp' && direction !== 'DOWN') {
                 event.preventDefault();
@@ -190,6 +210,7 @@ hide: true
             snake = [{ x: 10, y: 10 }];
             direction = 'RIGHT';
             score = 0;
+            scoreDisplay.textContent = `Score: ${score}`;
             gameOverDiv.classList.add('hidden');
             restartBtn.classList.add('hidden');
             gameInterval = setInterval(drawGame, 100);
