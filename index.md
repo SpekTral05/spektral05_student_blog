@@ -30,6 +30,7 @@ hide: true
       display: flex;
       justify-content: center;
       align-items: center;
+      overflow: hidden; /* Prevent page from scrolling */
     }
     /* Game Container */
     #game-container {
@@ -100,7 +101,7 @@ hide: true
     const colors = ["#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#FF00FF", "#00FFFF"];
     function startGame() {
       music.play(); // Play background music
-      document.getElementById("start-button").style.display = "none";
+      document.getElementById("start-button").style.display = "none"; // Hide start button
       document.getElementById("gameover").style.display = "none";
       snake = [{ x: 240, y: 240 }];
       dx = 16; dy = 0; score = 0; gameRunning = true;
@@ -170,11 +171,16 @@ hide: true
       document.getElementById("gameover").style.display = "block";
       document.getElementById("start-button").style.display = "block";
     }
+    // Disable arrow key scrolling while allowing trackpad scrolling
     document.addEventListener("keydown", (event) => {
       if (event.key === "ArrowUp" && dy === 0) { dx = 0; dy = -16; }
       if (event.key === "ArrowDown" && dy === 0) { dx = 0; dy = 16; }
       if (event.key === "ArrowLeft" && dx === 0) { dx = -16; dy = 0; }
       if (event.key === "ArrowRight" && dx === 0) { dx = 16; dy = 0; }
+      // Prevent default scrolling behavior for arrow keys
+      if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key)) {
+        event.preventDefault();
+      }
     });
   </script>
 </body>
