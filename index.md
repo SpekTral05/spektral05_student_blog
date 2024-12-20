@@ -42,6 +42,7 @@ hide: true
             box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
             transition: all 0.3s ease-in-out;
             margin-bottom: 20px;
+            animation: gradientFlow 5s ease infinite;
         }
         .start-btn:hover, .restart-btn:hover {
             transform: scale(1.1);
@@ -76,6 +77,13 @@ hide: true
         }
         body { overflow: auto; }
         .glow { text-shadow: 0 0 20px rgba(0, 255, 0, 1), 0 0 30px rgba(0, 255, 0, 0.7); }
+        @keyframes gradientFlow {
+            0% { background: linear-gradient(45deg, #ff0077, #ff7700); }
+            25% { background: linear-gradient(45deg, #00ff77, #0077ff); }
+            50% { background: linear-gradient(45deg, #7700ff, #ff00cc); }
+            75% { background: linear-gradient(45deg, #ff7700, #ff0077); }
+            100% { background: linear-gradient(45deg, #00ff77, #0077ff); }
+        }
     </style>
 </head>
 <body>
