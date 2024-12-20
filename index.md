@@ -13,221 +13,174 @@ hide: true
 
 [Tool Verification](https://spektral05.github.io/spektral05_student_blog/devops/tools/verify)
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snake Game</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: black;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: auto;
-            color: white;
-            flex-direction: column;
+
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #141414;
+        color: #bbde22;
+        display: flex;
+        flex-direction: row;
+        /*column = vertical, row = horizontal*/ 
+        align-items: center;
+        justify-content: flex-start;
+        height: 100vh;
+    }
+/*formatting*/
+    canvas {
+        display: block;
+        border-style: solid;
+        border-width: 10px;
+        border-color: #ff69b4;
+        border-radius: 15px;
+        margin-top: 20px;
+        /*background of the playing field where snake is played*/ 
+    }
+
+    h2 {
+        background: linear-gradient(135deg, #ff7e5f, #feb47b, #f7c8fc, #f5a5c0, #ff69b4, #f9d423);
+        background-size: 400% 400%;
+        animation: rainbow 15s ease infinite;
+        color: white;
+        padding: 10px;
+        border-radius: 8px;
+        text-align: center;
+        margin: 0;
+        /*color gradient and rotation*/ 
+    }
+
+    @keyframes rainbow {
+        0% {
+            background-position: 0% 50%;
         }
-        .start-btn, .restart-btn {
-            padding: 15px 30px;
-            background: linear-gradient(45deg, #ff0077, #ff7700);
-            border: none;
-            font-size: 20px;
-            color: white;
-            cursor: pointer;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
-            transition: all 0.3s ease-in-out;
-            margin-bottom: 20px;
-            animation: gradientFlow 5s ease infinite;
+        50% {
+            background-position: 100% 50%;
         }
-        .start-btn:hover, .restart-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 25px rgba(255, 0, 0, 1);
+        100% {
+            background-position: 0% 50%;
         }
-        .start-btn:active, .restart-btn:active {
-            transform: scale(0.95);
-        }
-        .hidden { display: none; }
-        .game-over {
-            font-size: 30px;
-            font-weight: bold;
-            text-align: center;
-            margin-top: 20px;
-            color: #ff0077;
-        }
-        .game-area {
-            position: relative;
-            box-shadow: 0 0 15px rgba(0, 255, 0, 1), 0 0 40px rgba(0, 255, 0, 0.7);
-            border-radius: 10px;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-        canvas {
-            background-color: #1a1a1a;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.7);
-            display: block;
-            margin: 0;
-        }
-        .score {
-            font-size: 20px;
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            color: lime;
-            font-weight: bold;
-        }
-        body { overflow: auto; }
-        .glow { text-shadow: 0 0 20px rgba(0, 255, 0, 1), 0 0 30px rgba(0, 255, 0, 0.7); }
-        @keyframes gradientFlow {
-            0% { background: linear-gradient(45deg, #ff0077, #ff7700); }
-            25% { background: linear-gradient(45deg, #00ff77, #0077ff); }
-            50% { background: linear-gradient(45deg, #7700ff, #ff00cc); }
-            75% { background: linear-gradient(45deg, #ff7700, #ff0077); }
-            100% { background: linear-gradient(45deg, #00ff77, #0077ff); }
-        }
-    </style>
-</head>
-<body>
-    <button class="start-btn" id="startBtn">Start Game</button>
-    <div class="game-area">
-        <div class="score" id="scoreDisplay">Score: 0</div>
-        <canvas id="gameCanvas" width="400" height="400" class="hidden"></canvas>
-    </div>
-    <div class="game-over hidden">
-        <p>Game Over!</p>
-        <button class="restart-btn hidden" id="restartBtn">Restart Game</button>
-    </div>
-    <script>
-        const startBtn = document.getElementById('startBtn');
-        const gameCanvas = document.getElementById('gameCanvas');
-        const restartBtn = document.getElementById('restartBtn');
-        const gameOverDiv = document.querySelector('.game-over');
-        const scoreDisplay = document.getElementById('scoreDisplay');
-        const ctx = gameCanvas.getContext('2d');
-        const scale = 20;
-        let snake = [{ x: 10, y: 10 }];
-        let direction = 'RIGHT';
-        let food = { x: 5, y: 5 };
+        /*this is what makes the h2 part cycle colors*/
+    }
+
+    .header {
+        font-size: 18px;
+        margin: 20px 0;
+    }
+/*font size and margins for header*/
+</style>
+
+<h2>Snake Game</h2>
+<div class="header">
+    Score: <span id="score_value">0</span>
+</div>
+<canvas id="snake" width="320" height="320" tabindex="1"></canvas>
+
+<!--
+shows the text on the header block (rainbow block)
+-->
+
+
+<script>
+    (function(){
+        const canvas = document.getElementById("snake");
+        const ctx = canvas.getContext("2d");
+        const BLOCK = 10;
+        let snake;
+        let snake_dir;
+        let snake_next_dir;
+        let snake_speed = 75;
+        let food = {x: 0, y: 0};
         let score = 0;
-        let gameInterval;
-        let isGameOver = false;
-        function drawGame() {
-            ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
-            drawSnake();
-            drawFood();
-            moveSnake();
-            checkCollisions();
-            updateScore();
-            if (isGameOver) {
-                clearInterval(gameInterval);
-                gameOverDiv.classList.remove('hidden');
-                restartBtn.classList.remove('hidden');
+/*snake logic, canvas is background, and ctx is the subject, const block time between snakes
+snake is the snake, snake_dir is the current direction, snake_next_dir is the next direction
+snake_speed is the snake speed, food is where the food is, score is the current score*/
+        const updateScore = () => document.getElementById("score_value").textContent = score;
+        /*updates score with score_value*/
+
+        const addFood = () => {
+            food.x = Math.floor(Math.random() * (canvas.width / BLOCK));
+            food.y = Math.floor(Math.random() * (canvas.height / BLOCK));
+        };
+        /*generates food based on avaliable blocks*/
+
+        const activeDot = (x, y, color = '#FF6347') => {
+            ctx.fillStyle = color;
+            ctx.fillRect(x * BLOCK, y * BLOCK, BLOCK, BLOCK);
+        };
+        /*draws the food onto the canvas*/
+
+        const changeDirection = (key) => {
+            if (key === 37 && snake_dir !== 1) snake_next_dir = 3; // Left
+            if (key === 38 && snake_dir !== 2) snake_next_dir = 0; // Up
+            if (key === 39 && snake_dir !== 3) snake_next_dir = 1; // Right
+            if (key === 40 && snake_dir !== 0) snake_next_dir = 2; // Down
+        };
+        /*change direction based on what key is pressed*/
+
+        const mainLoop = () => {
+            let _x = snake[0].x;
+            let _y = snake[0].y;
+            snake_dir = snake_next_dir;
+            /*main loop, does The runs continuously to update the game state, 
+            move the snake, and check for collisions.*/
+
+            switch (snake_dir) {
+                case 0: _y--; break; // Up
+                case 1: _x++; break; // Right
+                case 2: _y++; break; // Down
+                case 3: _x--; break; // Left
             }
-        }
-        function drawSnake() {
-    snake.forEach((part, index) => {
-        // Set the snake head color and glow
-        if (index === 0) {
-            ctx.fillStyle = 'lime';
-            ctx.shadowColor = 'lime'; // Apply glowing effect to head
-        } else {
-            ctx.fillStyle = 'green';
-            ctx.shadowColor = 'green'; // Apply glowing effect to body segments
-        }
-        ctx.shadowBlur = 10; // Apply glow intensity
-        ctx.fillRect(part.x * scale, part.y * scale, scale, scale);
-        ctx.strokeStyle = ctx.fillStyle;
-        ctx.lineWidth = 2;
-        ctx.strokeRect(part.x * scale, part.y * scale, scale, scale);
-        ctx.shadowBlur = 0; // Reset the shadow blur after drawing each part
-            });
-        }
-        function drawFood() {
-    ctx.fillStyle = 'red';
-    ctx.shadowColor = 'red'; // Apply glowing effect
-    ctx.shadowBlur = 10; // Adjust glow intensity
-    ctx.fillRect(food.x * scale, food.y * scale, scale, scale);
-    ctx.shadowBlur = 0; // Reset the shadow blur to avoid affecting other elements
-        }
-        function moveSnake() {
-            const head = { ...snake[0] };
-            if (direction === 'UP') head.y -= 1;
-            if (direction === 'DOWN') head.y += 1;
-            if (direction === 'LEFT') head.x -= 1;
-            if (direction === 'RIGHT') head.x += 1;
-            snake.unshift(head);
-            if (head.x === food.x && head.y === food.y) {
-                score++;
-                generateFood();
-            } else {
-                snake.pop();
+
+            snake.pop();
+            snake.unshift({x: _x, y: _y});
+
+            if (_x < 0 || _x >= canvas.width / BLOCK || _y < 0 || _y >= canvas.height / BLOCK) {
+                showGameOverScreen();
+                return;
             }
-        }
-        function generateFood() {
-            food = {
-                x: Math.floor(Math.random() * (gameCanvas.width / scale)),
-                y: Math.floor(Math.random() * (gameCanvas.height / scale)),
-            };
-        }
-        function checkCollisions() {
-            const head = snake[0];
-            if (head.x < 0 || head.x >= gameCanvas.width / scale || head.y < 0 || head.y >= gameCanvas.height / scale) {
-                isGameOver = true;
-            }
+
             for (let i = 1; i < snake.length; i++) {
-                if (snake[i].x === head.x && snake[i].y === head.y) {
-                    isGameOver = true;
+                if (snake[0].x === snake[i].x && snake[0].y === snake[i].y) {
+                    showGameOverScreen();
+                    return;
                 }
+                /*checks if the snake hits wall or collides with itself. if true game ends.*/
             }
-        }
-        function updateScore() {
-            scoreDisplay.textContent = `Score: ${score}`;
-        }
-        function changeDirection(event) {
-            if (event.key === 'ArrowUp' && direction !== 'DOWN') {
-                event.preventDefault();
-                direction = 'UP';
+
+            if (snake[0].x === food.x && snake[0].y === food.y) {
+                snake.push({});
+                score++;
+                updateScore();
+                addFood();
             }
-            if (event.key === 'ArrowDown' && direction !== 'UP') {
-                event.preventDefault();
-                direction = 'DOWN';
-            }
-            if (event.key === 'ArrowLeft' && direction !== 'RIGHT') {
-                event.preventDefault();
-                direction = 'LEFT';
-            }
-            if (event.key === 'ArrowRight' && direction !== 'LEFT') {
-                event.preventDefault();
-                direction = 'RIGHT';
-            }
-        }
-        function startGame() {
-            gameCanvas.classList.remove('hidden');
-            startBtn.classList.add('hidden');
-            gameInterval = setInterval(drawGame, 100);
-            document.addEventListener('keydown', changeDirection);
-        }
-        function restartGame() {
-            isGameOver = false;
-            snake = [{ x: 10, y: 10 }];
-            direction = 'RIGHT';
+            /*grows snake, updates score, checks if food is eaten, puts new food*/
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            /*clears canvas so frames wont stack on each other*/
+            snake.forEach((segment, index) => activeDot(segment.x, segment.y, index === 0 ? '#FFD700' : '#FF6347'));
+            /*redraws snake so that it does not become infinetly long*/
+            activeDot(food.x, food.y, '#32CD32');
+            /*draws food*/
+
+            setTimeout(mainLoop, snake_speed);
+            /*gets mainloop to run again so game will run, main loop will run every snake_speed milliseconds*/
+        };
+          const newGame = () => {
             score = 0;
-            scoreDisplay.textContent = `Score: ${score}`;
-            gameOverDiv.classList.add('hidden');
-            restartBtn.classList.add('hidden');
-            gameInterval = setInterval(drawGame, 100);
-            document.addEventListener('keydown', changeDirection);
-        }
-        startBtn.addEventListener('click', startGame);
-        restartBtn.addEventListener('click', restartGame);
-    </script>
-</body>
-</html>
+            updateScore();
+            snake = [{x: 10, y: 10}];
+            snake_dir = 1; // Start moving right
+            snake_next_dir = 1;
+            addFood();
+            mainLoop();
+        };
+        /*make new game, set position and start mainloop()*/
+
+        canvas.focus();
+        canvas.addEventListener("keydown", (e) => changeDirection(e.keyCode));
+        /*checks if key is pressed, changes direction*/
+        newGame();
+        /*is the new game*/
+    })();
+
+</script>
