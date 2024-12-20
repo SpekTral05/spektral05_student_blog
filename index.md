@@ -133,14 +133,21 @@ hide: true
             }
         }
         function drawSnake() {
-            snake.forEach((part, index) => {
-                ctx.fillStyle = index === 0 ? 'lime' : 'green';
-                ctx.fillRect(part.x * scale, part.y * scale, scale, scale);
-                ctx.strokeStyle = index === 0 ? 'lime' : 'green';
-                ctx.lineWidth = 2;
-                ctx.strokeRect(part.x * scale, part.y * scale, scale, scale);
-                ctx.shadowColor = index === 0 ? 'lime' : 'green';
-                ctx.shadowBlur = 10;
+    snake.forEach((part, index) => {
+        // Set the snake head color and glow
+        if (index === 0) {
+            ctx.fillStyle = 'lime';
+            ctx.shadowColor = 'lime'; // Apply glowing effect to head
+        } else {
+            ctx.fillStyle = 'green';
+            ctx.shadowColor = 'green'; // Apply glowing effect to body segments
+        }
+        ctx.shadowBlur = 10; // Apply glow intensity
+        ctx.fillRect(part.x * scale, part.y * scale, scale, scale);
+        ctx.strokeStyle = ctx.fillStyle;
+        ctx.lineWidth = 2;
+        ctx.strokeRect(part.x * scale, part.y * scale, scale, scale);
+        ctx.shadowBlur = 0; // Reset the shadow blur after drawing each part
             });
         }
         function drawFood() {
