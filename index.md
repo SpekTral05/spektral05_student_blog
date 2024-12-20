@@ -13,7 +13,7 @@ hide: true
 
 [Tool Verification](https://spektral05.github.io/spektral05_student_blog/devops/tools/verify)
 
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -28,7 +28,7 @@ hide: true
             justify-content: center;
             align-items: center;
             height: 100vh;
-            overflow: hidden;
+            overflow: auto; /* Allow scrolling again */
             color: white;
             flex-direction: column;
         }
@@ -75,7 +75,7 @@ hide: true
         }
         /* Prevent page scrolling when using arrow keys */
         body {
-            overflow: hidden;
+            overflow: auto; /* Allow normal scrolling */
         }
         /* Glowing text effect */
         .glow {
@@ -161,10 +161,22 @@ hide: true
             }
         }
         function changeDirection(event) {
-            if (event.key === 'ArrowUp' && direction !== 'DOWN') direction = 'UP';
-            if (event.key === 'ArrowDown' && direction !== 'UP') direction = 'DOWN';
-            if (event.key === 'ArrowLeft' && direction !== 'RIGHT') direction = 'LEFT';
-            if (event.key === 'ArrowRight' && direction !== 'LEFT') direction = 'RIGHT';
+            if (event.key === 'ArrowUp' && direction !== 'DOWN') {
+                event.preventDefault(); // Prevent arrow key scroll
+                direction = 'UP';
+            }
+            if (event.key === 'ArrowDown' && direction !== 'UP') {
+                event.preventDefault(); // Prevent arrow key scroll
+                direction = 'DOWN';
+            }
+            if (event.key === 'ArrowLeft' && direction !== 'RIGHT') {
+                event.preventDefault(); // Prevent arrow key scroll
+                direction = 'LEFT';
+            }
+            if (event.key === 'ArrowRight' && direction !== 'LEFT') {
+                event.preventDefault(); // Prevent arrow key scroll
+                direction = 'RIGHT';
+            }
         }
         function startGame() {
             gameCanvas.classList.remove('hidden');
