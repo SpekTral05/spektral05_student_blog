@@ -22,7 +22,7 @@ hide: true
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            background-color: black;
             margin: 0;
             display: flex;
             justify-content: center;
@@ -30,10 +30,7 @@ hide: true
             height: 100vh;
             overflow: hidden;
             color: white;
-        }
-        canvas {
-            background-color: #1a1a1a;
-            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+            flex-direction: column;
         }
         .start-btn, .restart-btn {
             padding: 15px 30px;
@@ -43,12 +40,13 @@ hide: true
             color: white;
             cursor: pointer;
             border-radius: 10px;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
             transition: all 0.3s ease-in-out;
+            margin-bottom: 20px;
         }
         .start-btn:hover, .restart-btn:hover {
             transform: scale(1.1);
-            box-shadow: 0 0 20px rgba(255, 0, 0, 1);
+            box-shadow: 0 0 25px rgba(255, 0, 0, 1);
         }
         .start-btn:active, .restart-btn:active {
             transform: scale(0.95);
@@ -61,6 +59,19 @@ hide: true
             font-weight: bold;
             text-align: center;
             margin-top: 20px;
+            color: #ff0077;
+        }
+        /* Glowing border for game area */
+        .game-area {
+            position: relative;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 1), 0 0 40px rgba(0, 255, 0, 0.7);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        canvas {
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.7);
         }
         /* Prevent page scrolling when using arrow keys */
         body {
@@ -74,7 +85,9 @@ hide: true
 </head>
 <body>
     <button class="start-btn" id="startBtn">Start Game</button>
-    <canvas id="gameCanvas" width="400" height="400" class="hidden"></canvas>
+    <div class="game-area">
+        <canvas id="gameCanvas" width="400" height="400" class="hidden"></canvas>
+    </div>
     <div class="game-over hidden">
         <p>Game Over!</p>
         <button class="restart-btn hidden" id="restartBtn">Restart Game</button>
