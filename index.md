@@ -13,7 +13,6 @@ hide: true
 
 [Tool Verification](https://spektral05.github.io/spektral05_student_blog/devops/tools/verify)
 
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -28,7 +27,7 @@ hide: true
             justify-content: center;
             align-items: center;
             height: 100vh;
-            overflow: auto; /* Allow scrolling again */
+            overflow: auto;
             color: white;
             flex-direction: column;
         }
@@ -51,9 +50,7 @@ hide: true
         .start-btn:active, .restart-btn:active {
             transform: scale(0.95);
         }
-        .hidden {
-            display: none;
-        }
+        .hidden { display: none; }
         .game-over {
             font-size: 30px;
             font-weight: bold;
@@ -61,26 +58,24 @@ hide: true
             margin-top: 20px;
             color: #ff0077;
         }
-        /* Glowing border for game area */
         .game-area {
             position: relative;
             box-shadow: 0 0 15px rgba(0, 255, 0, 1), 0 0 40px rgba(0, 255, 0, 0.7);
             border-radius: 10px;
             overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         canvas {
             background-color: #1a1a1a;
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(0, 255, 0, 0.7);
+            display: block;
+            margin: 0;
         }
-        /* Prevent page scrolling when using arrow keys */
-        body {
-            overflow: auto; /* Allow normal scrolling */
-        }
-        /* Glowing text effect */
-        .glow {
-            text-shadow: 0 0 20px rgba(0, 255, 0, 1), 0 0 30px rgba(0, 255, 0, 0.7);
-        }
+        body { overflow: auto; }
+        .glow { text-shadow: 0 0 20px rgba(0, 255, 0, 1), 0 0 30px rgba(0, 255, 0, 0.7); }
     </style>
 </head>
 <body>
@@ -119,7 +114,7 @@ hide: true
         }
         function drawSnake() {
             snake.forEach((part, index) => {
-                ctx.fillStyle = index === 0 ? 'lime' : 'green'; // Head is glowing lime
+                ctx.fillStyle = index === 0 ? 'lime' : 'green';
                 ctx.fillRect(part.x * scale, part.y * scale, scale, scale);
             });
         }
@@ -149,11 +144,9 @@ hide: true
         }
         function checkCollisions() {
             const head = snake[0];
-            // Wall collision
             if (head.x < 0 || head.x >= gameCanvas.width / scale || head.y < 0 || head.y >= gameCanvas.height / scale) {
                 isGameOver = true;
             }
-            // Self-collision
             for (let i = 1; i < snake.length; i++) {
                 if (snake[i].x === head.x && snake[i].y === head.y) {
                     isGameOver = true;
@@ -162,19 +155,19 @@ hide: true
         }
         function changeDirection(event) {
             if (event.key === 'ArrowUp' && direction !== 'DOWN') {
-                event.preventDefault(); // Prevent arrow key scroll
+                event.preventDefault();
                 direction = 'UP';
             }
             if (event.key === 'ArrowDown' && direction !== 'UP') {
-                event.preventDefault(); // Prevent arrow key scroll
+                event.preventDefault();
                 direction = 'DOWN';
             }
             if (event.key === 'ArrowLeft' && direction !== 'RIGHT') {
-                event.preventDefault(); // Prevent arrow key scroll
+                event.preventDefault();
                 direction = 'LEFT';
             }
             if (event.key === 'ArrowRight' && direction !== 'LEFT') {
-                event.preventDefault(); // Prevent arrow key scroll
+                event.preventDefault();
                 direction = 'RIGHT';
             }
         }
