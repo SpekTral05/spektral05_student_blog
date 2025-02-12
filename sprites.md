@@ -1,6 +1,7 @@
 ---
 layout: page
 title: gifs
+description: game sprites
 permalink: /sprites/
 ---
 
